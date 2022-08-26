@@ -7,7 +7,7 @@ maidou-admin
 * `maidou-admin` 是基于 `thinkphp6` 后台快速开发框架，完全实现接口化，并有接口注释文档
 * 用户登录状态基于 `lcobucci/jwt` 的状态管理
 * 权限判断基于 `php-casbin/think-authz` 的 `RBAC` 授权
-* 本项目为后台api服务，后台前端项目点击可查看 [`maidou-admin`](https://gitee.com/doudou-y/maidou-admin-ui) 前端项目
+* 本项目为后台api服务，后台前端项目点击可查看 [`maidou-admin`](https://github.com/doudou-dream/vue-2-maidou-admin-ui) 前端项目
 
 ## 环境要求
 
@@ -22,6 +22,7 @@ maidou-admin
 
 ~~~
 git clone https://gitee.com/doudou-y/maidou-admin-api.git
+git clone git@github.com:doudou-dream/vue-2-maidou-admin-api.git
 ~~~
 
 2. 安装依赖
