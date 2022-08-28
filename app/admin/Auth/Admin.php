@@ -2,7 +2,7 @@
 
 declare (strict_types=1);
 
-namespace app\admin\Auth;
+namespace app\admin\auth;
 
 use tauthz\facade\Enforcer;
 

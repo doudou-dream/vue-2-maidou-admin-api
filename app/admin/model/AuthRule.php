@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace app\admin\model;
 
 
+use think\helper\Arr;
+
 class AuthRule extends Base
 {
     protected $name = 'auth_rule';

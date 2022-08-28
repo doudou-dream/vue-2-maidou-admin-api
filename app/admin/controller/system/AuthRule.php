@@ -5,6 +5,7 @@ namespace app\admin\controller\system;
 
 use app\admin\model\AuthRule as AuthRuleModel;
 use app\common\BaseController;
+use app\common\support\annotation as ApiPower;
 use app\common\support\Tree;
 use hg\apidoc\annotation as Apidoc;
 use think\db\exception\DataNotFoundException;
@@ -14,11 +15,17 @@ use think\exception\ValidateException;
 use think\Request;
 
 /**
+ * 注解权限
+ * @ApiPower\Power(title="权限", slug="maidou.rule")
+ * 注解文档
  * @Apidoc\Title("权限")
  **/
 class AuthRule extends BaseController
 {
     /**
+     * 注解权限
+     * @ApiPower\Power(title="列表", url="/rule", method="GET",  slug="maidou.rule.index")
+     * 注解文档
      * @Apidoc\Title("列表")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/rule")
@@ -49,6 +56,9 @@ class AuthRule extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="创建", url="/rule", method="POST",  slug="maidou.rule.create")
+     * 注解文档
      * @Apidoc\Title("创建")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/rule/create")
@@ -103,6 +113,9 @@ class AuthRule extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="详情", url="/rule/:id", method="GET",  slug="maidou.rule.detail")
+     * 注解文档
      * @Apidoc\Title("详情")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/rule/:id")
@@ -125,6 +138,9 @@ class AuthRule extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="更新", url="/rule/:id", method="PUT",  slug="maidou.rule.update")
+     * 注解文档
      * @Apidoc\Title("更新")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/rule/:id")
@@ -190,6 +206,9 @@ class AuthRule extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="删除", url="/rule/:id", method="DELETE",  slug="maidou.rule.delete")
+     * 注解文档
      * @Apidoc\Title ("删除")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/rule/:id")

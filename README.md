@@ -7,6 +7,7 @@ maidou-admin
 * `maidou-admin` 是基于 `thinkphp6` 后台快速开发框架，完全实现接口化，并有接口注释文档
 * 用户登录状态基于 `lcobucci/jwt` 的状态管理
 * 权限判断基于 `php-casbin/think-authz` 的 `RBAC` 授权
+* topthink/think-annotation 注解路由
 * 本项目为后台api服务，后台前端项目点击可查看 [`maidou-admin`](https://github.com/doudou-dream/vue-2-maidou-admin-ui) 前端项目
 
 ## 环境要求
@@ -39,6 +40,26 @@ composer install
 或者使用
 2. 启动本地服务访问：http://localhost/install.php地址进行安装操作
 ~~~
+
+4.如果需要注解路由则修改一下内容
+ - 修改 \vendor\topthink\think-annotation\src\route\Rule.php文件Rule类中加入一下内容
+ ```php
+    /**
+     * 别名
+     * @var string
+     */
+    public $name;
+```
+ - 注解文档
+ ```php
+/**
+ * 注册路由
+ * @Route("login/captcha", method="GET", name="maidou.login.captcha")
+ * @Route\Middleware({Auth::class, Permission::class, AllowCrossDomain::class})
+ * 注解权限
+ * @ApiPower\Power(title="登录模块", slug="maidou.login") 
+ **/
+```
 
 ![图片](/doc/1643373317475-1.jpg)
 

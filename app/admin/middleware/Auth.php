@@ -7,7 +7,7 @@ use app\common\exception\FailException;
 use app\common\http\ResponseCode;
 use app\common\support\Token;
 use app\common\traits\ResponseJson;
-use app\admin\Auth\Admin as AuthAdmin;
+use app\admin\Auth\admin as AuthAdmin;
 use app\admin\model\Admin as AdminModel;
 use think\Request;
 use Closure;
@@ -61,9 +61,12 @@ class Auth
 
     /**
      * 权限过滤
+     *
+     * @param \think\Request $request
+     *
      * @return bool
      */
-    protected function shouldPassThrough(): bool
+    protected function shouldPassThrough(Request $request): bool
     {
         // token_filter
         return in_array(request()->rule()->getName(), config('maidou.auth.token_filter'));

@@ -7,6 +7,7 @@ use app\admin\model\Admin as AdminModel;
 use app\admin\model\AuthGroup as AuthGroupModel;
 use app\admin\model\AuthGroupAccess as AuthGroupAccessModel;
 use app\common\BaseController;
+use app\common\support\annotation as ApiPower;
 use hg\apidoc\annotation as Apidoc;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
@@ -15,11 +16,17 @@ use think\exception\ValidateException;
 use think\Request;
 
 /**
+ * 注解权限
+ * @ApiPower\Power(title="账号管理", slug="maidou.admin")
+ * 注解文档
  * @Apidoc\Title("账号管理")
  **/
 class Admin extends BaseController
 {
     /**
+     * 注解权限
+     * @ApiPower\Power(title="列表", url="/admin", method="GET",  slug="maidou.admin.index")
+     * 注解文档
      * @Apidoc\Title("列表")
      * @Apidoc\Url("/admin")
      * @Apidoc\Method("GET")
@@ -50,6 +57,9 @@ class Admin extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="创建", url="/admin", method="POST",  slug="maidou.admin.create")
+     * 注解文档
      * @Apidoc\Title("创建")
      * @Apidoc\Url("/admin/create")
      * @Apidoc\Method("POST")
@@ -84,6 +94,9 @@ class Admin extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="修改密码", url="/admin/modify-password", method="PATCH",  slug="maidou.admin.modifyPassword")
+     * 注解文档
      * @Apidoc\Title("修改密码")
      * @Apidoc\Url("/admin/modify-password")
      * @Apidoc\Method("PATCH")
@@ -122,6 +135,9 @@ class Admin extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="详情", url="/admin/:id", method="GET",  slug="maidou.admin.detail")
+     * 注解文档
      * @Apidoc\Title ("详情")
      * @Apidoc\Url("/admin/:id")
      * @Apidoc\Method("GET")
@@ -145,6 +161,9 @@ class Admin extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="更新", url="/admin/:id", method="PUT",  slug="maidou.admin.update")
+     * 注解文档
      * @Apidoc\Title("更新")
      * @Apidoc\Url("/admin/:id")
      * @Apidoc\Method("PUT")
@@ -191,6 +210,9 @@ class Admin extends BaseController
 
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="删除", url="/admin/:id", method="DELETE",  slug="maidou.admin.delete")
+     * 注解文档
      * @Apidoc\Title ("删除")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/admin/:id")
@@ -210,6 +232,9 @@ class Admin extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="授权", url="/admin/:id", method="PATCH",  slug="maidou.admin.access")
+     * 注解文档
      * @Apidoc\Title ("授权")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/admin/:id")
@@ -249,6 +274,9 @@ class Admin extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="角色列表", url="/admin/group", method="GET",  slug="maidou.admin.access")
+     * 注解文档
      * @Apidoc\Title("角色列表")
      * @Apidoc\Url("/admin/group")
      * @Apidoc\Method("GET")

@@ -59,6 +59,7 @@ class Permission
      */
     protected function shouldPassThrough($request): bool
     {
+        // dd(request()->rule()->getName());
         // permission_filter
         if (in_array(request()->rule()->getName(), config('maidou.auth.permission_filter')) ||
             app('auth-admin')->isRoot()) {

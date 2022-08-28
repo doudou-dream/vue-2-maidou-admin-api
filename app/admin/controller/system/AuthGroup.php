@@ -9,6 +9,7 @@ use app\admin\model\AuthRuleAccess as AuthRuleAccessModel;
 use app\common\BaseController;
 use app\common\support\Tree;
 use hg\apidoc\annotation as Apidoc;
+use app\common\support\annotation as ApiPower;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -16,11 +17,17 @@ use think\exception\ValidateException;
 use think\Request;
 
 /**
+ * 注解权限
+ * @ApiPower\Power(title="角色", slug="maidou.group")
+ * 注解文档
  * @Apidoc\Title("角色")
  **/
 class AuthGroup extends BaseController
 {
     /**
+     * 注解权限
+     * @ApiPower\Power(title="列表", url="/group", method="GET",  slug="maidou.group.index")
+     * 注解文档
      * @Apidoc\Title("列表")
      * @Apidoc\Url("/group")
      * @Apidoc\Method("GET")
@@ -51,6 +58,9 @@ class AuthGroup extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="创建", url="/group", method="POST",  slug="maidou.group.create")
+     * 注解文档
      * @Apidoc\Title("创建")
      * @Apidoc\Url("/group/create")
      * @Apidoc\Method("POST")
@@ -84,6 +94,9 @@ class AuthGroup extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="详情", url="/group/:id", method="GET",  slug="maidou.group.detail")
+     * 注解文档
      * @Apidoc\Title ("详情")
      * @Apidoc\Url("/group/:id")
      * @Apidoc\Method("GET")
@@ -107,6 +120,9 @@ class AuthGroup extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="更新", url="/group/:id", method="PUT",  slug="maidou.group.update")
+     * 注解文档
      * @Apidoc\Title("更新")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/group/:id")
@@ -152,6 +168,9 @@ class AuthGroup extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="授权", url="/group/:id", method="PATCH",  slug="maidou.group.access")
+     * 注解文档
      * @Apidoc\Title ("授权")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/group/:id")
@@ -194,6 +213,9 @@ class AuthGroup extends BaseController
 
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="删除", url="/group/:id", method="DELETE",  slug="maidou.group.delete")
+     * 注解文档
      * @Apidoc\Title ("删除")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/group/:id")
@@ -213,6 +235,9 @@ class AuthGroup extends BaseController
     }
 
     /**
+     * 注解权限
+     * @ApiPower\Power(title="权限列表", url="/group/rule", method="GET",  slug="maidou.group.rule")
+     * 注解文档
      * @Apidoc\Title("权限列表")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/group/rule")

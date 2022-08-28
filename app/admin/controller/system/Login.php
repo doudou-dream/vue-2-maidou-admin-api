@@ -8,23 +8,38 @@ use app\admin\model\AuthGroupAccess as AuthGroupAccessModel;
 use app\admin\model\AuthRule as AuthRuleModel;
 use app\common\BaseController;
 use app\common\http\ResponseCode;
+use app\common\support\annotation as ApiPower;
 use app\common\support\Captcha;
 use app\common\support\Token;
 use Exception;
 use hg\apidoc\annotation as Apidoc;
+use think\annotation\Route;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\ValidateException;
 use think\helper\Arr;
+use think\middleware\AllowCrossDomain;
 use think\Request;
-
+use app\admin\middleware\Auth;
+use app\admin\middleware\Permission;
+// 权限注解
 /**
+ * 注册路由
+ * @Route\Middleware({Auth::class, Permission::class, AllowCrossDomain::class})
+ * 注解权限
+ * @ApiPower\Power(title="登录模块", slug="maidou.login")
+ * 注解文档
  * @Apidoc\Title("登录")
- **/
+ */
 class Login extends BaseController
 {
     /**
+     * 注解路由
+     * @Route("login/captcha", method="GET", name="maidou.login.captcha")
+     * 注解权限
+     * @ApiPower\Power(title="验证码", url="/login/captcha", method="GET", slug="maidou.login.captcha")
+     * 注解文档
      * @Apidoc\Title("验证码")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/login/captcha")
@@ -48,6 +63,11 @@ class Login extends BaseController
     }
 
     /**
+     * 注解路由
+     * @Route("login/login", method="POST", name="maidou.login.login")
+     * 注解权限
+     * @ApiPower\Power(title="登录", url="/login", method="POST", slug="maidou.login.login")
+     * 注解文档
      * @Apidoc\Title("登录")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/lgoin")
@@ -100,6 +120,11 @@ class Login extends BaseController
     }
 
     /**
+     * 注解路由
+     * @Route("login/login-out", method="DELETE", name="maidou.login.loginOut")
+     * 注解权限
+     * @ApiPower\Power(title="退出登录", url="/login/log-out", method="DELETE", slug="maidou.login.loginOut")
+     * 注解文档
      * @Apidoc\Title("退出登录")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/login-out/:id")
@@ -114,7 +139,7 @@ class Login extends BaseController
             return $this->error('账号错误');
         }
         try {
-            Token::delete();
+            (new \app\common\support\Token)->delete();
         } catch (Exception $e) {
             $this->error($e->getMessage(), ResponseCode::LOGOUT_ERROR);
         }
@@ -123,10 +148,15 @@ class Login extends BaseController
     }
 
     /**
+     * 注解路由
+     * @Route("login/info", method="GET", name="maidou.login.info")
+     * 注解权限
+     * @ApiPower\Power(title="登录用户信息", url="/login/info", method="GET", slug="maidou.login.info")
+     * 注解文档
      * @Apidoc\Title("登录用户信息")
      * @Apidoc\Desc("")
      * @Apidoc\Url("/login/info")
-     * @Apidoc\Method("get")
+     * @Apidoc\Method("GET")
      * @Apidoc\Tag("login")
      * @Apidoc\Param("id", type="string", require=true, desc="管理员id")
      */

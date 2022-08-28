@@ -4,7 +4,7 @@ use app\admin\middleware;
 use think\facade\Route;
 
 // 登录功能
-Route::group('/pc/v1',function () {
+$res = Route::group('/pc/v1',function () {
     $common = '\\app\\admin\\controller\\system\\';
     // 登录
     Route::get('/login/captcha', $common.'Login@captcha')->name('maidou.login.captcha');// 验证码
