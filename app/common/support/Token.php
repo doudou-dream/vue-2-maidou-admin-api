@@ -12,9 +12,8 @@ use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Validation\Constraint\IssuedBy;
 use Lcobucci\JWT\Validation\Constraint\PermittedFor;
-use Lcobucci\JWT\Validation\Constraint\ValidAt;
+use Lcobucci\JWT\Validation\Constraint\StrictValidAt;
 use think\Exception;
-
 class Token
 {
     // 过期缓存储存
@@ -28,7 +27,7 @@ class Token
 
     //配置属性
     protected $config = [
-        'id'       => 'uS24PRa1IiYK1HLr', //token的唯一标识
+        'id'       => 'mBC5v1sOKVvbdEitdSBenu59nfNfhwkedkJVNabosTw=', //token的唯一标识
         'issuer'   => 'admin-api.maidou.com', //签发人
         'audience' => '', //接收人 魔术方法 __construct 动态设置
         'sign'     => 'maidou', //签名密钥
@@ -150,7 +149,7 @@ class Token
     {
         return Configuration::forSymmetricSigner(
             new Sha256(),
-            InMemory::plainText($this->config['id'])
+            InMemory::base64Encoded($this->config['id'])
         );
     }
 
@@ -245,7 +244,7 @@ class Token
         //验证是否过期
         $timezone = new DateTimeZone('Asia/Shanghai');
         $now      = new SystemClock($timezone);
-        $valid_at = new ValidAt($now);
+        $valid_at = new StrictValidAt($now);
         if (!$configuration->validator()->validate($jwtToken, $valid_at)) {
             throw new Exception('token过期');
         }

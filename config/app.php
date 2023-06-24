@@ -4,9 +4,8 @@
 // +----------------------------------------------------------------------
 
 return [
-    // 是否是演示站点
-    'demo_station'     => env('app.demo_station', false),
     // 应用地址
+    'demo_station'     => env('app.demo_station', false),
     'app_host'         => env('app.host', ''),
     // 应用的命名空间
     'app_namespace'    => '',
