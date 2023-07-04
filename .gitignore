@@ -3,4 +3,4 @@
 /vendor
 *.log
 .env
-./public/storage
+/public/storage
