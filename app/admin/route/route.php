@@ -6,6 +6,7 @@ use think\facade\Route;
 // 登录功能
 $res = Route::group('/pc/v1',function () {
     $common = '\\app\\admin\\controller\\system\\';
+    $commonPath = '\\app\\admin\\controller\\';
     // 登录
     Route::get('/login/captcha', $common.'Login@captcha')->name('maidou.login.captcha');// 验证码
     Route::post('/login', $common.'Login@login')->name('maidou.login.login');// 登录
@@ -34,6 +35,8 @@ $res = Route::group('/pc/v1',function () {
     Route::get('/rule/:id', $common.'AuthRule@detail')->name('maidou.rule.detail')->pattern(['id'=>'[A-Za-z0-9]{32}']);// 详情
     Route::put('/rule/:id', $common.'AuthRule@update')->name('maidou.rule.update')->pattern(['id'=>'[A-Za-z0-9]{32}']);// 修改
     Route::delete('/rule/:id', $common.'AuthRule@delete')->name('maidou.rule.delete')->pattern(['id'=>'[A-Za-z0-9]{32}']);// 删除
+    // 文件上传
+    Route::post('/upload', $commonPath.'Common@upload')->name('maidou.rule.upload');// 上传文件
 })
     ->middleware(middleware\Auth::class)// jwt认证
     ->middleware(middleware\Permission::class)// 权限认证

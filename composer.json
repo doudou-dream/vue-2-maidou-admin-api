@@ -26,10 +26,10 @@
         "lcobucci/jwt": "3.*",
         "topthink/think-multi-app": "^1.0",
         "ext-gd": "*",
-        "hg/apidoc": "^3.0",
         "casbin/think-authz": "^1.5",
         "nesbot/carbon": "^2.56",
-        "topthink/think-annotation": "1.*"
+        "topthink/think-annotation": "1.*",
+        "topthink/think-filesystem": "^2.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^4.2",

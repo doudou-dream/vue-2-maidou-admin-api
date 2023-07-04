@@ -16,6 +16,7 @@ return [
             'maidou.login.captcha',
             'maidou.login.loginOut',
             'maidou.login.info',
+            'maidou.rule.upload'
         ],
     ],
     // 密码加盐
