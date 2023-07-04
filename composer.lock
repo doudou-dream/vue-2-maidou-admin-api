@@ -2068,22 +2068,22 @@
         },
         {
             "name": "topthink/think-annotation",
-            "version": "v2.0.3",
+            "version": "v2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/think-annotation.git",
-                "reference": "57e2e659bbaac286fdda5a7e07a3d0c113c26507"
+                "reference": "293dae6f2d7bdb6fed1a89babe176f6059738ccf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/think-annotation/zipball/57e2e659bbaac286fdda5a7e07a3d0c113c26507",
-                "reference": "57e2e659bbaac286fdda5a7e07a3d0c113c26507",
+                "url": "https://api.github.com/repos/top-think/think-annotation/zipball/293dae6f2d7bdb6fed1a89babe176f6059738ccf",
+                "reference": "293dae6f2d7bdb6fed1a89babe176f6059738ccf",
                 "shasum": ""
             },
             "require": {
                 "ergebnis/classy": "^1.4",
                 "php": "^8.0",
-                "topthink/framework": "^6.0"
+                "topthink/framework": "^6.0 || ^8.0"
             },
             "require-dev": {
                 "topthink/think-ide-helper": "^1.0"
@@ -2117,9 +2117,9 @@
             "description": "Annotation For ThinkPHP6",
             "support": {
                 "issues": "https://github.com/top-think/think-annotation/issues",
-                "source": "https://github.com/top-think/think-annotation/tree/v2.0.3"
+                "source": "https://github.com/top-think/think-annotation/tree/v2.0.4"
             },
-            "time": "2023-02-16T15:26:17+00:00"
+            "time": "2023-07-01T10:56:40+00:00"
         },
         {
             "name": "topthink/think-helper",

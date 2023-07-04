@@ -68,7 +68,11 @@ class Auth
      */
     protected function shouldPassThrough(Request $request): bool
     {
+        $name = request()->rule()->getOption('slug');
+        if(empty($name)){
+            $name = request()->rule()->getName();
+        }
         // token_filter
-        return in_array(request()->rule()->getName(), config('maidou.auth.token_filter'));
+        return in_array($name, config('maidou.auth.token_filter'));
     }
 }

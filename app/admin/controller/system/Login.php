@@ -13,7 +13,6 @@ use app\common\support\Captcha;
 use app\common\support\Token;
 use Exception;
 use hg\apidoc\annotation as Apidoc;
-use think\annotation\Route;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -23,20 +22,21 @@ use think\middleware\AllowCrossDomain;
 use think\Request;
 use app\admin\middleware\Auth;
 use app\admin\middleware\Permission;
+use think\annotation\route\Middleware;
+use think\annotation\route\Route;
+
 // 权限注解
 /**
- * 注册路由
- * @Route\Middleware({Auth::class, Permission::class, AllowCrossDomain::class})
  * 注解权限
  * @ApiPower\Power(title="登录模块", slug="maidou.login")
  * 注解文档
  * @Apidoc\Title("登录")
  */
+//注册路由中间件
+#[Middleware(Auth::class, Permission::class, AllowCrossDomain::class)]
 class Login extends BaseController
 {
     /**
-     * 注解路由
-     * @Route("login/captcha", method="GET", name="maidou.login.captcha")
      * 注解权限
      * @ApiPower\Power(title="验证码", url="/login/captcha", method="GET", slug="maidou.login.captcha")
      * 注解文档
@@ -51,6 +51,7 @@ class Login extends BaseController
      * )
      * @return \think\response\Json
      */
+    #[Route('GET', '/login/captcha', ['slug' => 'maidou.login.captcha'])]
     public function captcha(): \think\response\Json
     {
         $captchaAttr = (new Captcha())->makeCode()->getAttr();
@@ -63,10 +64,6 @@ class Login extends BaseController
     }
 
     /**
-     * 注解路由
-     * @Route("login/login", method="POST", name="maidou.login.login")
-     * 注解权限
-     * @ApiPower\Power(title="登录", url="/login", method="POST", slug="maidou.login.login")
      * 注解文档
      * @Apidoc\Title("登录")
      * @Apidoc\Desc("")
@@ -77,21 +74,23 @@ class Login extends BaseController
      * @Apidoc\Param("password", type="string", require=true, desc="密码，需要MD5加密")
      * @Apidoc\Param("captcha", type="string", require=true, desc="验证码")
      */
+    // 注解路由
+    #[Route('POST', '/login/login', ['slug' => 'maidou.login.login'])]
     public function login(Request $request): \think\response\Json
     {
         $data = $request->all();
         try {
             $this->validate($data, [
-                'name'     => 'require|alphaNum',
+                'name' => 'require|alphaNum',
                 'password' => 'require|alphaNum|length:32',
-                'captcha'  => 'require|length:4',
+                'captcha' => 'require|length:4',
             ], [
-                'name.require'      => '账号必须',
-                'name.alphaNum'     => '账号错误',
-                'password.require'  => '密码必须',
+                'name.require' => '账号必须',
+                'name.alphaNum' => '账号错误',
+                'password.require' => '密码必须',
                 'password.alphaNum' => '密码错误',
-                'captcha.require'   => '验证码必须',
-                'captcha.length'    => '验证码错误',
+                'captcha.require' => '验证码必须',
+                'captcha.length' => '验证码错误',
             ]);
         } catch (ValidateException $e) {
             return $this->error($e->getError());
@@ -110,7 +109,7 @@ class Login extends BaseController
         $token = (new Token())
             ->withStorages([
                 'admin_id' => $admin['id'],
-                'is_root'  => ((int)$admin['is_root'] === 1),
+                'is_root' => ((int)$admin['is_root'] === 1),
             ])
             ->getToken();
 
@@ -120,8 +119,6 @@ class Login extends BaseController
     }
 
     /**
-     * 注解路由
-     * @Route("login/login-out", method="DELETE", name="maidou.login.loginOut")
      * 注解权限
      * @ApiPower\Power(title="退出登录", url="/login/log-out", method="DELETE", slug="maidou.login.loginOut")
      * 注解文档
@@ -132,6 +129,8 @@ class Login extends BaseController
      * @Apidoc\Tag("login")
      * @Apidoc\Param("id", type="string", require=true, desc="管理员id")
      */
+    // 注解路由
+    #[Route('DELETE', '/login/login-out', ['slug' => 'maidou.login.loginOut'])]
     public function logOut(): \think\response\Json
     {
         $admin = AdminModel::where('id', app('auth-admin')->getId() ?? '')->find();
@@ -148,8 +147,6 @@ class Login extends BaseController
     }
 
     /**
-     * 注解路由
-     * @Route("login/info", method="GET", name="maidou.login.info")
      * 注解权限
      * @ApiPower\Power(title="登录用户信息", url="/login/info", method="GET", slug="maidou.login.info")
      * 注解文档
@@ -160,23 +157,25 @@ class Login extends BaseController
      * @Apidoc\Tag("login")
      * @Apidoc\Param("id", type="string", require=true, desc="管理员id")
      */
+    // 注解路由
+    #[Route('GET', '/login/info', ['slug' => 'maidou.login.info'])]
     public function info(): \think\response\Json
     {
         try {
             $row = app('auth-admin')->getData();
             if (app('auth-admin')->isRoot()) {
                 $access = AuthRuleModel::field('slug')->select()->toArray();
-                $slug   = array_column($access, 'slug');
+                $slug = array_column($access, 'slug');
             } else {
                 $access = AuthGroupAccessModel::where('admin_id', $row['id'])->select()->toArray();
                 $access = AuthRuleModel::field('slug')
                     ->whereIn('id', array_column($access, 'rule_id'))
                     ->select()
                     ->toArray();
-                $slug   = array_column($access, 'slug');
+                $slug = array_column($access, 'slug');
             }
             $row['roles'] = $slug;
-        } catch (DataNotFoundException | ModelNotFoundException | DbException $e) {
+        } catch (DataNotFoundException|ModelNotFoundException|DbException $e) {
             return $this->error($e->getMessage());
         }
 
