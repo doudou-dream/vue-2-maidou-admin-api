@@ -4,3 +4,5 @@
 *.log
 .env
 /public/storage
+.DS_Store
+*/.DS_Store
