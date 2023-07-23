@@ -3,6 +3,8 @@ declare (strict_types=1);
 
 namespace app\admin\controller\system;
 
+use app\admin\middleware\Auth;
+use app\admin\middleware\Permission;
 use app\admin\model\AuthGroup as AuthGroupModel;
 use app\admin\model\AuthRule as AuthRuleModel;
 use app\admin\model\AuthRuleAccess as AuthRuleAccessModel;
@@ -10,10 +12,14 @@ use app\common\BaseController;
 use app\common\support\Tree;
 use hg\apidoc\annotation as Apidoc;
 use app\common\support\annotation as ApiPower;
+use think\annotation\route\Middleware;
+use think\annotation\route\Pattern;
+use think\annotation\route\Route;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\ValidateException;
+use think\middleware\AllowCrossDomain;
 use think\Request;
 
 /**
@@ -22,6 +28,8 @@ use think\Request;
  * 注解文档
  * @Apidoc\Title("角色")
  **/
+//注册路由中间件
+#[Middleware([Auth::class, Permission::class, AllowCrossDomain::class])]
 class AuthGroup extends BaseController
 {
     /**
@@ -39,6 +47,7 @@ class AuthGroup extends BaseController
      *   @Apidoc\Returned("total",type="array",default="0",desc="数据总量")
      * )
      */
+    #[Route('GET', '/group', ['slug' => 'maidou.group.index'])]
     public function index(Request $request): \think\response\Json
     {
         $start  = (int)$request->param('start', 0);
@@ -69,6 +78,7 @@ class AuthGroup extends BaseController
      * @Apidoc\Param("description", type="string", require=false, desc="简介")
      * @Apidoc\Param("listorder", type="int", require=false, desc="排序")
      */
+    #[Route('POST', '/group', ['slug' => 'maidou.group.create'])]
     public function create(Request $request): \think\response\Json
     {
         $data = $request->all();
@@ -106,6 +116,8 @@ class AuthGroup extends BaseController
      *   @Apidoc\Returned("data",type="string",desc="信息")
      * )
      */
+    #[Route('GET', '/group/:id', ['slug' => 'maidou.group.detail'])]
+    #[Pattern('id', '[A-Za-z0-9]{32}')] // 规则
     public function detail($id): \think\response\Json
     {
         try {
@@ -133,6 +145,8 @@ class AuthGroup extends BaseController
      * @Apidoc\Param("description", type="string", require=false, desc="简介")
      * @Apidoc\Param("listorder", type="int", require=false, desc="排序")
      */
+    #[Route('PUT', '/group/:id', ['slug' => 'maidou.group.update'])]
+    #[Pattern('id', '[A-Za-z0-9]{32}')] // 规则
     public function update(string $id, Request $request): \think\response\Json
     {
         $data = $request->all();
@@ -179,6 +193,8 @@ class AuthGroup extends BaseController
      * @Apidoc\Param("id", type="string", require=true, desc="角色id")
      * @Apidoc\Param("ids", type="string", require=true, desc="权限ids xxx,xxx,xxx")
      */
+    #[Route('PATCH', '/group/:id', ['slug' => 'maidou.group.access'])]
+    #[Pattern('id', '[A-Za-z0-9]{32}')] // 规则
     public function access(string $id, Request $request): \think\response\Json
     {
         $row = AuthGroupModel::query()->where('id', $id)->find();
@@ -223,6 +239,8 @@ class AuthGroup extends BaseController
      * @Apidoc\Tag("authrule")
      * @Apidoc\Param("id", type="string", require=true, desc="角色id")
      */
+    #[Route('DELETE', '/group/:id', ['slug' => 'maidou.group.delete'])]
+    #[Pattern('id', '[A-Za-z0-9]{32}')] // 规则
     public function delete(string $id): \think\response\Json
     {
         $row = AuthGroupModel::where('id', $id)->find();
@@ -248,6 +266,7 @@ class AuthGroup extends BaseController
      *   @Apidoc\Returned("total",type="array",desc="数据总量")
      * )
      */
+    #[Route('GET', '/group/rule', ['slug' => 'maidou.group.rule'])]
     public function rule(Request $request): \think\response\Json
     {
         $order  = $request->param('order', 'ASC');

@@ -7,7 +7,7 @@ use app\common\exception\FailException;
 use app\common\http\ResponseCode;
 use app\common\support\Token;
 use app\common\traits\ResponseJson;
-use app\admin\Auth\admin as AuthAdmin;
+use app\admin\Auth\Admin as AuthAdmin;
 use app\admin\model\Admin as AdminModel;
 use think\Request;
 use Closure;

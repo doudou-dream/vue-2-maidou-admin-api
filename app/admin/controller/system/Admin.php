@@ -3,16 +3,22 @@ declare (strict_types=1);
 
 namespace app\admin\controller\system;
 
+use app\admin\middleware\Auth;
+use app\admin\middleware\Permission;
 use app\admin\model\Admin as AdminModel;
 use app\admin\model\AuthGroup as AuthGroupModel;
 use app\admin\model\AuthGroupAccess as AuthGroupAccessModel;
 use app\common\BaseController;
 use app\common\support\annotation as ApiPower;
 use hg\apidoc\annotation as Apidoc;
+use think\annotation\route\Middleware;
+use think\annotation\route\Pattern;
+use think\annotation\route\Route;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\ValidateException;
+use think\middleware\AllowCrossDomain;
 use think\Request;
 
 /**
@@ -21,6 +27,8 @@ use think\Request;
  * 注解文档
  * @Apidoc\Title("账号管理")
  **/
+//注册路由中间件
+#[Middleware([Auth::class, Permission::class, AllowCrossDomain::class])]
 class Admin extends BaseController
 {
     /**
@@ -38,6 +46,7 @@ class Admin extends BaseController
      *   @Apidoc\Returned("total",type="array",desc="数据总量")
      * )
      */
+    #[Route('GET', '/admin', ['slug' => 'maidou.admin.index'])]
     public function index(Request $request)
     {
         $start  = (int)$request->param('start', 0);
@@ -68,6 +77,7 @@ class Admin extends BaseController
      * @Apidoc\Param("nickname", type="string", require=false, desc="昵称")
      * @Apidoc\Param("introduce", type="string", require=false, desc="简介")
      */
+    #[Route('POST', '/admin', ['slug' => 'maidou.admin.index'])]
     public function create(Request $request): \think\response\Json
     {
         $data = $request->all();
@@ -81,10 +91,15 @@ class Admin extends BaseController
         } catch (ValidateException $e) {
             return $this->error($e->getError());
         }
+        $isName  = AdminModel::where('name', $data['name'])->findOrEmpty();
+        if (!$isName->isEmpty()) {
+            return $this->error('账号已存在');
+        }
         $result = AdminModel::query()->create([
             'name'      => $data['name'],
             'nickname'  => $data['nickname'],
             'introduce' => $data['introduce'],
+            'type' => $data['type'],
         ]);
         if ($result->isEmpty()) {
             return $this->error('错误');
@@ -104,6 +119,7 @@ class Admin extends BaseController
      * @Apidoc\Param("id", type="string", require=true, desc="账号id")
      * @Apidoc\Param("password", type="string", require=true, desc="账号密码")
      */
+    #[Route('PATCH', '/admin/modify-password', ['slug' => 'maidou.admin.modifyPassword'])]
     public function modifyPassword(Request $request): \think\response\Json
     {
         $data = $request->all();
@@ -147,6 +163,8 @@ class Admin extends BaseController
      *   @Apidoc\Returned("data",type="string",desc="账号信息")
      * )
      */
+    #[Route('GET', '/admin/:id', ['slug' => 'maidou.admin.detail'])]
+    #[Pattern('id', '[A-Za-z0-9]{32}')] // 规则
     public function detail(string $id): \think\response\Json
     {
         try {
@@ -173,6 +191,8 @@ class Admin extends BaseController
      * @Apidoc\Param("nickname", type="string", require=false, desc="昵称")
      * @Apidoc\Param("introduce", type="string", require=false, desc="简介")
      */
+    #[Route('PUT', '/admin/:id', ['slug' => 'maidou.admin.update'])]
+    #[Pattern('id', '[A-Za-z0-9]{32}')] // 规则
     public function update(string $id, Request $request): \think\response\Json
     {
         $data = $request->all();
@@ -220,6 +240,8 @@ class Admin extends BaseController
      * @Apidoc\Tag("authrule")
      * @Apidoc\Param("id", type="string", require=true, desc="管理员id")
      */
+    #[Route('DELETE', '/admin/:id', ['slug' => 'maidou.admin.delete'])]
+    #[Pattern('id', '[A-Za-z0-9]{32}')] // 规则
     public function delete(string $id): \think\response\Json
     {
         $row = AdminModel::where('id', $id)->find();
@@ -243,6 +265,8 @@ class Admin extends BaseController
      * @Apidoc\Param("id", type="string", require=true, desc="管理员id")
      * @Apidoc\Param("ids", type="string", require=false, desc="角色ids xxx,xxx,xxx")
      */
+    #[Route('PATCH', '/admin/:id', ['slug' => 'maidou.admin.access'])]
+    #[Pattern('id', '[A-Za-z0-9]{32}')] // 规则
     public function access(string $id, Request $request): \think\response\Json
     {
         $row = AdminModel::query()->where('id', $id)->find();
@@ -286,6 +310,7 @@ class Admin extends BaseController
      *   @Apidoc\Returned("total",type="array",desc="数据总量")
      * )
      */
+    #[Route('GET', '/admin/group', ['slug' => 'maidou.admin.access'])]
     public function group(Request $request): \think\response\Json
     {
         $order = $request->param('order', 'ASC');

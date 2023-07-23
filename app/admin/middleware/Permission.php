@@ -47,7 +47,10 @@ class Permission
         } catch (Exception $e) {
             throw new HttpException(ResponseCode::AUTH_ERROR, $e->getMessage());
         }
-        $requestUrl    = request()->rule()->getName() ?? '';
+        $requestUrl = request()->rule()->getOption('slug');
+        if(empty($requestUrl)){
+            $requestUrl = request()->rule()->getName();
+        }
         $requestMethod = request()->method() ?? '';
         if (!Enforcer::enforce($adminId, $requestUrl, $requestMethod)) {
             throw new HttpException(ResponseCode::AUTH_ERROR, '你没有访问权限');

@@ -3,15 +3,21 @@ declare (strict_types=1);
 
 namespace app\admin\controller\system;
 
+use app\admin\middleware\Auth;
+use app\admin\middleware\Permission;
 use app\admin\model\AuthRule as AuthRuleModel;
 use app\common\BaseController;
 use app\common\support\annotation as ApiPower;
 use app\common\support\Tree;
 use hg\apidoc\annotation as Apidoc;
+use think\annotation\route\Middleware;
+use think\annotation\route\Pattern;
+use think\annotation\route\Route;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\ValidateException;
+use think\middleware\AllowCrossDomain;
 use think\Request;
 
 /**
@@ -20,6 +26,8 @@ use think\Request;
  * 注解文档
  * @Apidoc\Title("权限")
  **/
+//注册路由中间件
+#[Middleware([Auth::class, Permission::class, AllowCrossDomain::class])]
 class AuthRule extends BaseController
 {
     /**
@@ -36,6 +44,7 @@ class AuthRule extends BaseController
      *   @Apidoc\Returned("total",type="array",desc="数据总量")
      * )
      */
+    #[Route('GET', '/rule', ['slug' => 'maidou.rule.index'])]
     public function index(Request $request): \think\response\Json
     {
         $order  = $request->param('order', 'ASC');
@@ -74,6 +83,7 @@ class AuthRule extends BaseController
      * @Apidoc\Param("is_need_auth", type="string", require=false, desc="是否需要权限")
      * @Apidoc\Param("is_system", type="string", require=false, desc="是否是系统权限")
      */
+    #[Route('POST', '/rule', ['slug' => 'maidou.rule.create'])]
     public function create(Request $request): \think\response\Json
     {
         $data = $request->all();
@@ -126,6 +136,8 @@ class AuthRule extends BaseController
      *   @Apidoc\Returned("data",type="string",desc="权限信息")
      * )
      */
+    #[Route('GET', '/rule/:id', ['slug' => 'maidou.rule.detail'])]
+    #[Pattern('id', '[A-Za-z0-9]{32}')] // 规则
     public function detail($id): \think\response\Json
     {
         try {
@@ -157,6 +169,8 @@ class AuthRule extends BaseController
      * @Apidoc\Param("is_need_auth", type="string", require=false, desc="是否需要权限")
      * @Apidoc\Param("is_system", type="string", require=false, desc="是否是系统权限")
      */
+    #[Route('PUT', '/rule/:id', ['slug' => 'maidou.rule.update'])]
+    #[Pattern('id', '[A-Za-z0-9]{32}')] // 规则
     public function update(string $id, Request $request): \think\response\Json
     {
         $data = $request->all();
@@ -216,6 +230,8 @@ class AuthRule extends BaseController
      * @Apidoc\Tag("authrule")
      * @Apidoc\Param("id", type="string", require=true, desc="权限id")
      */
+    #[Route('DELETE', '/rule/:id', ['slug' => 'maidou.rule.delete'])]
+    #[Pattern('id', '[A-Za-z0-9]{32}')] // 规则
     public function delete(string $id): \think\response\Json
     {
         $row = AuthRuleModel::where('id', $id)->find();

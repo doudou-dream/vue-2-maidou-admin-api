@@ -6,6 +6,7 @@ namespace app\admin\controller\system;
 use app\admin\model\Admin as AdminModel;
 use app\admin\model\AuthGroupAccess as AuthGroupAccessModel;
 use app\admin\model\AuthRule as AuthRuleModel;
+use app\admin\model\AuthRuleAccess as AuthRuleModelModel;
 use app\common\BaseController;
 use app\common\http\ResponseCode;
 use app\common\support\annotation as ApiPower;
@@ -33,7 +34,7 @@ use think\annotation\route\Route;
  * @Apidoc\Title("登录")
  */
 //注册路由中间件
-#[Middleware(Auth::class, Permission::class, AllowCrossDomain::class)]
+#[Middleware([Auth::class, Permission::class, AllowCrossDomain::class])]
 class Login extends BaseController
 {
     /**
@@ -75,7 +76,7 @@ class Login extends BaseController
      * @Apidoc\Param("captcha", type="string", require=true, desc="验证码")
      */
     // 注解路由
-    #[Route('POST', '/login/login', ['slug' => 'maidou.login.login'])]
+    #[Route('POST', '/login', ['slug' => 'maidou.login.login'])]
     public function login(Request $request): \think\response\Json
     {
         $data = $request->all();
@@ -130,7 +131,7 @@ class Login extends BaseController
      * @Apidoc\Param("id", type="string", require=true, desc="管理员id")
      */
     // 注解路由
-    #[Route('DELETE', '/login/login-out', ['slug' => 'maidou.login.loginOut'])]
+    #[Route('DELETE', '/login/logout', ['slug' => 'maidou.login.loginOut'])]
     public function logOut(): \think\response\Json
     {
         $admin = AdminModel::where('id', app('auth-admin')->getId() ?? '')->find();
@@ -168,8 +169,9 @@ class Login extends BaseController
                 $slug = array_column($access, 'slug');
             } else {
                 $access = AuthGroupAccessModel::where('admin_id', $row['id'])->select()->toArray();
+                $authRuleRow = AuthRuleModelModel::whereIn('group_id', array_column($access, 'group_id'))->select()->toArray();
                 $access = AuthRuleModel::field('slug')
-                    ->whereIn('id', array_column($access, 'rule_id'))
+                    ->whereIn('id', array_column($authRuleRow, 'rule_id'))
                     ->select()
                     ->toArray();
                 $slug = array_column($access, 'slug');
